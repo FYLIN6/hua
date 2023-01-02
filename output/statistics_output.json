@@ -1,0 +1,18 @@
+{
+    "Total Number of Job Generated": 78,
+    "Finished Job": {
+        "Quantity": 78,
+        "Effective Duration With Load [s]": 758,
+        "Effective Ratio": 0.4398,
+        "Average Job Cycle Time [s]": 22.0948
+    },
+    "Unfinished Job": {
+        "Quantity": 0,
+        "Penalty Time Per Job [s]": 900
+    },
+    "Delay Due To Waiting for Pick Up (Job) [s]": 409.23,
+    "Delay Due To Traffic Congestion (Loaded Vehicle) [s]": 10.17,
+    "Delay Due To Traffic Congestion (Empty Vehicle) [s]": 9.44,
+    "Duration Without Load [s]": 1164.09,
+    "Adjusted Average Job Cycle Time [s]": 22.0948
+}
