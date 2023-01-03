@@ -8,8 +8,14 @@ class Point:
 
 
 class Route:
-    def __init__(self, transportation_network, vehicle, start_square_unit, end_square_unit):
-        self.__transportation_network = transportation_network
+    default_transportation_network = None
+    def __init__(self, transportation_network, vehicle, start_square_unit, end_square_unit, block_unit = None):
+        if transportation_network is None:
+            self.__transportation_network = Route.default_transportation_network
+        else:
+            self.__transportation_network = transportation_network
+            Route.default_transportation_network = self.__transportation_network
+
         self.__vehicle = vehicle
         self.__start_square_unit = start_square_unit
         self.__end_square_unit = end_square_unit
@@ -20,6 +26,7 @@ class Route:
         self.__dimension_width = self.__transportation_network.dimension[1]
         self.__grid_df = self.__transportation_network.grid_df
         self.__vehicle_df = self.__transportation_network.vehicle_df
+        self.__block_unit = block_unit
 
     def default_algo_to_generate_route(self):
         """
@@ -31,7 +38,6 @@ class Route:
         @return self.__astar_path() (a path: <List<Tuple<int, int>, Tuple<int, int>, ...>>)
         """
         self.__obstacle_set = set(self.__grid_df.loc[self.__grid_df['IsObstacle'] == True]['SquareUnitIndex'])
-
         for row_vehicle in self.__vehicle_df.itertuples():
             current_vehicle = getattr(row_vehicle, "Vehicle")
             if current_vehicle is not self.__vehicle:
@@ -157,7 +163,15 @@ class Route:
         @return path (<List<Tuple<int, int>, Tuple<int, int>, ...>>)
                 (For example: [(0, 0), (1, 0), (2, 0), (2, 1), (2, 2)])
         """
-        path = None
+        self.__obstacle_set = set(self.__grid_df.loc[self.__grid_df['IsObstacle'] == True]['SquareUnitIndex'])
+        if self.__block_unit is not None:
+            self.__obstacle_set.update(self.__block_unit)
+        for row_vehicle in self.__vehicle_df.itertuples():
+            current_vehicle = getattr(row_vehicle, "Vehicle")
+            if current_vehicle is not self.__vehicle:
+                self.__obstacle_set.add(current_vehicle.park_position)
+
+        return self.__astar_path()
         return path
 
 
